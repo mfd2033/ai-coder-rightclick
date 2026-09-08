@@ -1,0 +1,16 @@
+# Windows
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+*.lnk
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+
+# Local deploy dir (launchers/icons are copied here at install time)
+/tools/ctx-menu/
