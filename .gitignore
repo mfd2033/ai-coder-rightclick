@@ -14,3 +14,16 @@ ehthumbs.db
 
 # Local deploy dir (launchers/icons are copied here at install time)
 /tools/ctx-menu/
+
+# WorkBuddy local cache
+.workbuddy/
+
+# macOS
+.DS_Store
+
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
