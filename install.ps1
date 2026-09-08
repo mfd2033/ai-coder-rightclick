@@ -214,5 +214,5 @@ Write-Host '  1. 在任意文件夹空白处右键 -> Windows 11 需点「显示
 Write-Host '  2. 或选中一个文件夹右键 -> 同上'
 Write-Host '  3. 点击后弹出 PowerShell，标题栏为 <tool> - <目录>，随后执行对应命令'
 Write-Host ''
-Write-Host '卸载：双击 D:\右键菜单卸载\卸载-<工具>.bat（或运行 卸载-全部.bat 一次性清掉全部）' -ForegroundColor Cyan
+Write-Host "卸载：双击 $PSScriptRoot\卸载-<工具>.bat（或运行 卸载-全部.bat 一次性清掉全部）" -ForegroundColor Cyan
 Write-Host ''

@@ -4,7 +4,7 @@
 .DESCRIPTION
     删除由 ctx-menu 安装的右键菜单项（注册表项）。
     支持逐个卸载或一次清空全部；自动重启 Windows 资源管理器。
-    不会删除 D:\tools\ctx-menu 中的启动器与图标文件。
+    不会删除已部署的启动器与图标文件。
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool opencode
     powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool claude
