@@ -10,7 +10,7 @@
 - **显示名干净** —— 注册表键名是 `01_opencode`，但菜单上只显示 `opencode`（由 `MUIVerb` 控制）。
 - **官方图标** —— 每项使用对应工具的官方 `.ico`。
 - **自包含** —— 安装/卸载脚本、启动器、图标同目录打包，双击 `.bat` 即用。
-- **支持单独或批量** —— 可只增删某一个，也可一次增删三个。
+- **每个工具独立管理** —— 一次只添加或移除一个工具，互不影响。
 
 ## 支持的工具
 
@@ -32,28 +32,28 @@
 
 ### 安装（添加菜单项）
 
-双击 **`添加-全部.bat`** 一次添加三个，或双击 **`添加-<工具>.bat`** 单独添加。
+双击 **`添加-<工具>.bat`**（如 `添加-opencode.bat`）添加对应工具。
 
 也可在终端运行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -Tool all
-# 或只装一个：
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -Tool opencode
 ```
+
+把命令中的 `opencode` 换成 `claude` / `cline` 即可装对应工具。
 
 启动器默认部署到 `D:\tools\ctx-menu`，可用 `-InstallDir` 改路径：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -Tool all -InstallDir "C:\my\tools"
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Tool opencode -InstallDir "C:\my\tools"
 ```
 
 ### 卸载（移除菜单项）
 
-双击 **`卸载-全部.bat`** 一次移除三个，或双击 **`卸载-<工具>.bat`** 单独移除。
+双击 **`卸载-<工具>.bat`**（如 `卸载-claude.bat`）移除对应工具。
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool all
+powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool claude
 ```
 
 卸载只删除注册表项，**不会**删除 `D:\tools\ctx-menu` 下的启动器与图标文件。
@@ -92,12 +92,12 @@ powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool all
 
 | 文件 | 用途 |
 |---|---|
-| `install.ps1` | 核心安装脚本（自包含）。`-Tool opencode | claude | cline | all` |
-| `ctx-uninstall.ps1` | 核心卸载脚本。`-Tool opencode | claude | cline | all`（`ctx-` = context menu） |
+| `install.ps1` | 核心安装脚本（自包含）。`-Tool opencode` / `claude` / `cline`（必填） |
+| `ctx-uninstall.ps1` | 核心卸载脚本。`-Tool opencode` / `claude` / `cline`（必填，`ctx-` = context menu） |
 | `opencode.ps1` / `claude.ps1` / `cline.ps1` | 部署到安装目录的启动器 |
 | `icons/` | 各工具的官方 `.ico` 图标 |
-| `添加-*.bat` | 双击添加（单个或三个） |
-| `卸载-*.bat` | 双击移除（单个或三个） |
+| `添加-*.bat` | 双击添加单个工具 |
+| `卸载-*.bat` | 双击移除单个工具 |
 
 ## 许可证
 

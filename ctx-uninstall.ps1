@@ -3,22 +3,21 @@
     ctx-menu 右键菜单 - 卸载工具
 .DESCRIPTION
     删除由 ctx-menu 安装的右键菜单项（注册表项）。
-    支持逐个卸载或一次清空全部；自动重启 Windows 资源管理器。
+    自动重启 Windows 资源管理器。
     不会删除已部署的启动器与图标文件。
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool opencode
     powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool claude
     powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool cline
-    powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool all
 .NOTES
     双击同名 .bat 入口即可；脚本需 UTF-8 with BOM。
 #>
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet('opencode', 'claude', 'cline', 'all')]
+    [ValidateSet('opencode', 'claude', 'cline')]
     [string]$Tool,
 
-    # 批量操作或脚本化调用时用：跳过重启资源管理器（菜单需下次重启 explorer 后才刷新）
+    # 脚本化调用时用：跳过重启资源管理器（菜单需下次重启 explorer 后才刷新）
     [switch]$NoRestartExplorer
 )
 
@@ -37,16 +36,10 @@ $LegacyMap = @{
     'cline'    = 'Cline'
 }
 
+# 目标：当前工具 + 旧版键名（无前缀）；opencode 额外清 v1 的 OpenCodeHD
 $Targets = @()
-if ($Tool -eq 'all') {
-    $Targets += $Map['opencode'], $Map['claude'], $Map['cline']
-    $Targets += $LegacyMap['opencode'], $LegacyMap['claude'], $LegacyMap['cline']
-    # v1 (opencode-hd) 也一并清掉
-    $Targets += 'OpenCodeHD'
-}
-else {
-    $Targets += $Map[$Tool], $LegacyMap[$Tool]
-}
+$Targets += $Map[$Tool], $LegacyMap[$Tool]
+if ($Tool -eq 'opencode') { $Targets += 'OpenCodeHD' }
 
 $Roots = @(
     'HKCU:\Software\Classes\Directory\Background\shell',

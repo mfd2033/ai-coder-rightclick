@@ -1,29 +1,31 @@
 ﻿<#
 .SYNOPSIS
-    ctx-menu 右键菜单 - 一键安装（不需要管理员权限）
+    ctx-menu 右键菜单 - 安装单个工具（不需要管理员权限）
 
 .DESCRIPTION
-    部署以下三个工具的右键菜单项到 HKCU\Software\Classes：
+    部署指定工具的右键菜单项到 HKCU\Software\Classes：
         - opencode  ->  D:\tools\ctx-menu\opencode.ps1
         - claude    ->  D:\tools\ctx-menu\claude.ps1
         - cline     ->  D:\tools\ctx-menu\cline.ps1
+    -Tool 必填，指定要安装的工具（一次一个）。
     每个工具注册两个场景：
         Directory\Background\shell\<Verb>  -> 文件夹空白处右键，参数 %V
         Directory\shell\<Verb>              -> 选中文件夹右键，参数 %1
     清理已废弃的 OpenCodeHD 旧键（如有）。
 
 .EXAMPLE
-    powershell -ExecutionPolicy Bypass -File .\install.ps1
-    powershell -ExecutionPolicy Bypass -File .\install.ps1 -InstallDir D:\tools\ctx-menu
-    powershell -ExecutionPolicy Bypass -File .\install.ps1 -NoRestartExplorer
+    powershell -ExecutionPolicy Bypass -File .\install.ps1 -Tool opencode
+    powershell -ExecutionPolicy Bypass -File .\install.ps1 -Tool claude -InstallDir D:\tools\ctx-menu
+    powershell -ExecutionPolicy Bypass -File .\install.ps1 -Tool cline -NoRestartExplorer
 
 .NOTES
     文件必须保存为 UTF-8 with BOM，否则 PowerShell 5.1 会按 GBK 解析中文。
 #>
 param(
-    # 只装某一个工具；默认 all = 三个全装
-    [ValidateSet('opencode', 'claude', 'cline', 'all')]
-    [string]$Tool = 'all',
+    # 要安装的工具（必填）
+    [Parameter(Mandatory = $true)]
+    [ValidateSet('opencode', 'claude', 'cline')]
+    [string]$Tool,
 
     [string]$InstallDir = 'D:\tools\ctx-menu',
     [switch]$NoRestartExplorer
@@ -41,10 +43,8 @@ $Tools = @(
     @{ Verb = '02_claude';   Display = 'claude';   Launcher = 'claude.ps1';   Icon = 'claude.ico'   },
     @{ Verb = '03_cline';    Display = 'cline';    Launcher = 'cline.ps1';    Icon = 'cline.ico'    }
 )
-# 只装指定工具时过滤列表（Display 就是 opencode / claude / cline）
-if ($Tool -ne 'all') {
-    $Tools = @($Tools | Where-Object { $_.Display -eq $Tool })
-}
+# 过滤出要装的工具（Display 就是 opencode / claude / cline）
+$Tools = @($Tools | Where-Object { $_.Display -eq $Tool })
 
 $PsExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
 
@@ -210,9 +210,9 @@ else {
 }
 Write-Host ''
 Write-Host '验证方法：' -ForegroundColor Cyan
-Write-Host '  1. 在任意文件夹空白处右键 -> Windows 11 需点「显示更多选项」-> 应看到 opencode / claude / cline 三项'
+Write-Host "  1. 在任意文件夹空白处右键 -> Windows 11 需点「显示更多选项」-> 应看到刚安装的 $Tool 一项"
 Write-Host '  2. 或选中一个文件夹右键 -> 同上'
 Write-Host '  3. 点击后弹出 PowerShell，标题栏为 <tool> - <目录>，随后执行对应命令'
 Write-Host ''
-Write-Host "卸载：双击 $PSScriptRoot\卸载-<工具>.bat（或运行 卸载-全部.bat 一次性清掉全部）" -ForegroundColor Cyan
+Write-Host "卸载：双击 $PSScriptRoot\卸载-<工具>.bat（或运行 .\ctx-uninstall.ps1 -Tool <工具>）" -ForegroundColor Cyan
 Write-Host ''
