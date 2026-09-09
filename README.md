@@ -85,6 +85,7 @@ powershell -ExecutionPolicy Bypass -File .\ctx-uninstall.ps1 -Tool all
 
 - **Windows 11 二级菜单**：静态注册表项只出现在「显示更多选项」（旧版右键菜单）里。要进一级菜单需 COM shell 扩展或 Nilesoft Shell / ExplorerPatcher 之类的工具。经典菜单 hack（`{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}`）自 Windows 11 24H2 起已弃用。
 - **编辑 `.ps1` 文件**：若修改脚本，请保存为 **UTF-8 with BOM**——否则 PowerShell 5.1 会按 GBK 解析中文导致乱码。
+- **编辑 `.bat` 文件**：请保存为 **UTF-8 无 BOM + CRLF 行尾**——带 BOM 或 LF 行尾会被 cmd 误解析，可能吞掉命令名导致脚本静默失败（表现为"卸载后菜单项仍在"）。
 - **重启资源管理器**：安装/卸载会自动重启 Explorer（会关闭已打开的文件夹窗口）。加 `-NoRestartExplorer` 可跳过。
 
 ## 文件说明

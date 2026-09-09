@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 chcp 65001 > nul
 title 一次性卸载全部 ctx-menu 菜单项
 echo.
