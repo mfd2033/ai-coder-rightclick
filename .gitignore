@@ -15,6 +15,9 @@ ehthumbs.db
 # Local deploy dir (launchers/icons are copied here at install time)
 /tools/ctx-menu/
 
+# Claude Code local config
+.claude/
+
 # WorkBuddy local cache
 .workbuddy/
 
